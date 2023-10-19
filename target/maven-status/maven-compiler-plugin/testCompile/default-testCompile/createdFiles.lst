@@ -1,0 +1,10 @@
+StationaryEnemyTest.class
+ScoreboardTest.class
+TheGridTest.class
+BonusRewardTest.class
+MovingEnemyTest.class
+RewardTest.class
+IntegrationMovingPlayerTest.class
+TickTest.class
+TileTest.class
+PlayerTest.class
