@@ -6,7 +6,6 @@ Welcome to Group 19's project:
 ##### Within the game Kiki will venture through treacherous dungeons in search of ancient Za'atar.  
 ##### Throughout these levels Kiki will overcome tough obstacles in search of her final reward .
 
-##### Enjoy our latest [trailer](https://youtu.be/q4PsC01-DUM)
 
 ### Follow these instructions
  
