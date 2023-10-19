@@ -1,4 +1,3 @@
-Welcome to Group 19's project:  
 ## Nazareth: Kiki's Search for Za'atar.
 
 ##### We hope you enjoy the game we have presented so far.
