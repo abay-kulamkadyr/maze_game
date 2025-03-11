@@ -1,4 +1,5 @@
 import java.io.IOException;
+import org.lwjgl.openal.AL;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
@@ -51,7 +52,7 @@ public class RunGame extends StateBasedGame {
       appgc.setShowFPS(false);
       new TickThread().start();
       appgc.start();
-
+      AL.destroy();
     } catch (SlickException e) {
       e.printStackTrace();
     }

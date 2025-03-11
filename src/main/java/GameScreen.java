@@ -90,25 +90,25 @@ public class GameScreen extends BasicGameState {
     sb.secretResetMethod();
     StationaryEnemy.resetList();
     openExitDoor = false;
-    tile = new Image("src/main/resources/Tile.png");
-    topWall = new Image("src/main/resources/Top wall 1.png");
-    bottomWall = new Image("src/main/resources/Bottom wall 1.png");
-    rightWall = new Image("src/main/resources/Right wall 1.png");
-    leftWall = new Image("src/main/resources/Left wall 1.png");
-    bottomLeft = new Image("src/main/resources/Bottom Left Corner.png");
-    bottomRight = new Image("src/main/resources/Bottom right corner wall.png");
-    topLeft = new Image("src/main/resources/Left Top corner wall.png");
-    topRight = new Image("src/main/resources/Top Right Corner.png");
+    tile = new Image("Tile.png");
+    topWall = new Image("Top wall 1.png");
+    bottomWall = new Image("Bottom wall 1.png");
+    rightWall = new Image("Right wall 1.png");
+    leftWall = new Image("Left wall 1.png");
+    bottomLeft = new Image("Bottom Left Corner.png");
+    bottomRight = new Image("Bottom right corner wall.png");
+    topLeft = new Image("Left Top corner wall.png");
+    topRight = new Image("Top Right Corner.png");
     // player = new Image("src/main/resources/joe.png");
 
-    leftSheet = new SpriteSheet("src/main/resources/leftSprite.png", 32, 32);
-    downSheet = new SpriteSheet("src/main/resources/downSprite.png", 17, 32);
-    rightSheet = new SpriteSheet("src/main/resources/rightSprite.png", 32, 32);
-    upSheet = new SpriteSheet("src/main/resources/upSprite.png", 17, 32);
-    skeleSheet = new SpriteSheet("src/main/resources/skeleSprite.png", 32, 32);
-    SpriteSheet skullSheet = new SpriteSheet("src/main/resources/skullSprite.png", 32, 32);
-    skeleLeftSheet = new SpriteSheet("src/main/resources/skeleSpriteLeft.png", 32, 32);
-    SpriteSheet coinSheet = new SpriteSheet("src/main/resources/coinSheet.png", 32, 32);
+    leftSheet = new SpriteSheet("leftSprite.png", 32, 32);
+    downSheet = new SpriteSheet("downSprite.png", 17, 32);
+    rightSheet = new SpriteSheet("rightSprite.png", 32, 32);
+    upSheet = new SpriteSheet("upSprite.png", 17, 32);
+    skeleSheet = new SpriteSheet("skeleSprite.png", 32, 32);
+    SpriteSheet skullSheet = new SpriteSheet("skullSprite.png", 32, 32);
+    skeleLeftSheet = new SpriteSheet("skeleSpriteLeft.png", 32, 32);
+    SpriteSheet coinSheet = new SpriteSheet("coinSheet.png", 32, 32);
     moveEnemy = new Animation(skeleSheet, 240);
     statEnemy = new Animation(skullSheet, 240);
     player = new Animation(rightSheet, 240);
@@ -117,18 +117,17 @@ public class GameScreen extends BasicGameState {
     gnomePress = 0;
     gnomeCount = 0;
 
-    hatch = new Image("src/main/resources/hatch.png");
-    ladder = new Image("src/main/resources/sack.png");
+    hatch = new Image("hatch.png");
+    ladder = new Image("sack.png");
     // The gnome image
-    gnome = new Image("src/main/resources/gnomed.png");
-    // moveEnemy=new Image("src/main/resources/scully.png");
+    gnome = new Image("gnomed.png");
     createBarriers();
-    reward = new Image("src/main/resources/chest.png");
+    reward = new Image("chest.png");
     createRewards();
 
     // bonusreward=new Image("src/main/resources/coin_1.png");
 
-    scoreboard = new Image("src/main/resources/scoreboard.png");
+    scoreboard = new Image("scoreboard.png");
 
     // hardcoding the location of each stationary enemy.
     // statEnemy=new Image("src/main/resources/sapphirefire.png");
@@ -138,13 +137,13 @@ public class GameScreen extends BasicGameState {
     player1 = new Player(tileSize, tileSize + topBuffer);
     enemy = new MovingEnemy((tileSize * 38), ((tileSize * 16) + topBuffer));
     theGrid.resetBooleans();
-    bgm = new Music("src/main/resources/Aladdin.ogg");
-    pop = new Sound("src/main/resources/Grunt.ogg");
-    pickupEffect = new Sound("src/main/resources/coinPickup.ogg");
-    bonusEffect = new Sound("src/main/resources/bonusSound.ogg");
-    statEffect = new Sound("src/main/resources/statHit.ogg");
-    scullyEffect = new Sound("src/main/resources/wow.ogg");
-    gnomed = new Sound("src/main/resources/gnomed.ogg");
+    bgm = new Music("Aladdin.ogg");
+    pop = new Sound("Grunt.ogg");
+    pickupEffect = new Sound("coinPickup.ogg");
+    bonusEffect = new Sound("bonusSound.ogg");
+    statEffect = new Sound("statHit.ogg");
+    scullyEffect = new Sound("wow.ogg");
+    gnomed = new Sound("gnomed.ogg");
     playStat = false;
     playReward = false;
     playBonus = false;

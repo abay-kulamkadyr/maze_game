@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.Font;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
 import org.newdawn.slick.GameContainer;
@@ -42,16 +42,17 @@ public class FailureMenu extends BasicGameState {
    */
   public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
     // Placeholder background image
-    background = new Image("src/main/resources/failureBG.png");
+    background = new Image("failureBG.png");
     // Exit button
-    exit = new Image("src/main/resources/Exit.png");
-    restart = new Image("src/main/resources/Restart Level.png");
+    exit = new Image("Exit.png");
+    restart = new Image("Restart Level.png");
 
     try {
-      font =
-          Font.createFont(
-                  Font.TRUETYPE_FONT, new File("src/main/resources/Gothic_Birthday_Cake.ttf"))
-              .deriveFont(24f);
+      InputStream fontStream = FailureMenu.class.getResourceAsStream("/Gothic_Birthday_Cake.ttf");
+      if (fontStream == null) {
+        throw new IOException("Font resource not found");
+      }
+      font = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(24f);
     } catch (FontFormatException | IOException e) {
       e.printStackTrace();
     }
@@ -104,10 +105,7 @@ public class FailureMenu extends BasicGameState {
     }
   }
 
-  /**
-   * Restarts the game with the original set up.
-   *
-   */
+  /** Restarts the game with the original set up. */
   public void restartGame(StateBasedGame sbg) throws SlickException {
     sbg.getState(1).init(sbg.getContainer(), sbg);
     sbg.enterState(1);
