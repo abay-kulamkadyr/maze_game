@@ -32,15 +32,15 @@ public class LoreMenu extends BasicGameState {
   @Override
   public void init(GameContainer container, StateBasedGame game) throws SlickException {
 
-    bg = new Image("src/main/resources/LoreBG.png");
-    kiki = new Image("src/main/resources/LoreKiki.png");
-    scully = new Image("src/main/resources/LoreSc.png");
-    ef = new Image("src/main/resources/LoreEF.png");
-    kikiSheet = new SpriteSheet("src/main/resources/kikiSprite.png", 66, 125);
+    bg = new Image("LoreBG.png");
+    kiki = new Image("LoreKiki.png");
+    scully = new Image("LoreSc.png");
+    ef = new Image("LoreEF.png");
+    kikiSheet = new SpriteSheet("kikiSprite.png", 66, 125);
     kikiWalks = new Animation(kikiSheet, 240);
-    scullySheet = new SpriteSheet("src/main/resources/homieSprite.png", 125, 125);
+    scullySheet = new SpriteSheet("homieSprite.png", 125, 125);
     scullyWalks = new Animation(scullySheet, 240);
-    SpriteSheet skullSheet = new SpriteSheet("src/main/resources/homiesHomieSprite.png", 125, 125);
+    SpriteSheet skullSheet = new SpriteSheet("homiesHomieSprite.png", 125, 125);
     skullWalks = new Animation(skullSheet, 240);
   }
 

@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.Font;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
@@ -44,20 +44,19 @@ public class Pause extends BasicGameState {
   @Override
   public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
     // Placeholder background image
-    background = new Image("src/main/resources/pauseBG.png");
+    background = new Image("pauseBG.png");
     // Exit button
-    exit = new Image("src/main/resources/ExittoMain.png");
+    exit = new Image("ExittoMain.png");
     // Restart button
-    restart = new Image("src/main/resources/Restart Level.png");
-    back = new Image("src/main/resources/Back.png");
+    restart = new Image("Restart Level.png");
+    back = new Image("Back.png");
     try {
-      font =
-          Font.createFont(
-                  Font.TRUETYPE_FONT, new File("src/main/resources/Gothic_Birthday_Cake.ttf"))
-              .deriveFont(24f);
-    } catch (FontFormatException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+      InputStream fontStream = FailureMenu.class.getResourceAsStream("/Gothic_Birthday_Cake.ttf");
+      if (fontStream == null) {
+        throw new IOException("Font resource not found");
+      }
+      font = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(24f);
+    } catch (FontFormatException | IOException e) {
       e.printStackTrace();
     }
     gothic = new TrueTypeFont(font, true);
@@ -129,10 +128,7 @@ public class Pause extends BasicGameState {
     }
   }
 
-  /**
-   * Restarts the game with the original set up.
-   *
-   */
+  /** Restarts the game with the original set up. */
   public void restartGame(StateBasedGame sbg) throws SlickException {
     sbg.getState(1).init(sbg.getContainer(), sbg);
     sbg.enterState(1);

@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.Font;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
 import org.newdawn.slick.GameContainer;
@@ -50,22 +50,20 @@ public class VictoryMenu extends BasicGameState {
   @Override
   public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
     // Placeholder background image
-    background = new Image("src/main/resources/victoryBG.png");
+    background = new Image("victoryBG.png");
     // Exit button
-    exit = new Image("src/main/resources/Exit.png");
+    exit = new Image("Exit.png");
     // Restart button
-    exitToMain = new Image("src/main/resources/ExittoMain.png");
+    exitToMain = new Image("ExittoMain.png");
     try {
-      font =
-          Font.createFont(
-                  Font.TRUETYPE_FONT, new File("src/main/resources/Gothic_Birthday_Cake.ttf"))
-              .deriveFont(24f);
-    } catch (FontFormatException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+      InputStream fontStream = FailureMenu.class.getResourceAsStream("/Gothic_Birthday_Cake.ttf");
+      if (fontStream == null) {
+        throw new IOException("Font resource not found");
+      }
+      font = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(24f);
+    } catch (FontFormatException | IOException e) {
       e.printStackTrace();
     }
-    gothic = new TrueTypeFont(font, true);
   }
 
   /**

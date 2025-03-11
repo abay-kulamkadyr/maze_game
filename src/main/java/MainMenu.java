@@ -25,17 +25,17 @@ public class MainMenu extends BasicGameState {
    * @param sbg state based game
    */
   public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-    exit = new Image("src/main/resources/Exit.png");
-    settings = new Image("src/main/resources/Settings.png");
-    lore = new Image("src/main/resources/Lore.png");
-    start = new Image("src/main/resources/Start Game.png");
+    exit = new Image("Exit.png");
+    settings = new Image("Settings.png");
+    lore = new Image("Lore.png");
+    start = new Image("Start Game.png");
   }
 
   /** Draws everything on the Game Screen using the render method */
   @Override
   public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
-    Image background = new Image("src/main/resources/Menu.png");
+    Image background = new Image("Menu.png");
 
     g.drawImage(background, 0, 0);
     exit.draw(xPos, yPos);
