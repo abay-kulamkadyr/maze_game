@@ -6,17 +6,72 @@ import java.util.Random;
  * location and time it is avaliable for everytime the game is ran.
  */
 public class BonusReward {
-  public int value = 500;
-  private float x;
-  private float y;
-  private boolean collected = false;
+  private static final ArrayList<BonusReward> bonusList = new ArrayList<>();
   private static int count = 0;
-  private int deadtime = 0;
+  private final float x;
+  private final float y;
+  private final TheGrid theGrid = new TheGrid();
+  public int value = 500;
+  private boolean collected = false;
+  private int deadTime = 0;
   private int lifetime = 0;
   private boolean isAlive = false;
-  private int statetime = 0;
-  private TheGrid theGrid = new TheGrid();
-  private static ArrayList<BonusReward> bonusList = new ArrayList<>();
+  private int stateTime = 0;
+
+  /**
+   * Constructs a new BonusReward at the startX and startY. Gives the reward a random deadtime and
+   * lifetime along with creating a statetime using the current time in ticks.
+   *
+   * @see Tick
+   */
+  public BonusReward(int upperBoundX, int upperBoundY) {
+    count++;
+    Random rand = new Random();
+    int upperLimit = 320;
+    deadTime = rand.nextInt(upperLimit - 32) + 32;
+    lifetime = rand.nextInt(upperLimit - 32) + 32;
+    Tick.instance();
+    stateTime = (Tick.getTickRunning()) / 32;
+    int tileType = 1;
+    int randomX = 0;
+    int randomY = 0;
+    while (tileType > 0) {
+      // random from 1 - upperBoundX
+      randomX = rand.nextInt(upperBoundX - 1) + 1;
+      // creates random values from 1-upperBoundY
+      randomY = rand.nextInt(upperBoundY - 1) + 1;
+      tileType = TheGrid.getTileAt(randomX, randomY);
+    }
+    this.x = randomX;
+    this.y = randomY;
+  }
+
+  /**
+   * Checks if there is alreadu the maximum of bonus rewards allowed.
+   *
+   * @return whether the maximum amount of bonus rewards have been made or not.
+   */
+  public static boolean isExceeding() {
+    return count > 4;
+  }
+
+  /**
+   * Add an object of type BonusReward to the bonus rewards list
+   *
+   * @param b BonusReward
+   */
+  public static void addToList(BonusReward b) {
+    bonusList.add(b);
+  }
+
+  /**
+   * Gets the bonus rewards list
+   *
+   * @return the bonus rewards list
+   */
+  public static ArrayList<BonusReward> getBonusList() {
+    return bonusList;
+  }
 
   /**
    * Dead time is the of time the award should be off of the screen for. This is measured in ticks.
@@ -24,12 +79,12 @@ public class BonusReward {
    * @see Tick
    * @return returns the deadtime.
    */
-  public int getDeadtime() {
-    return deadtime;
+  public int getDeadTime() {
+    return deadTime;
   }
 
   /**
-   * Life time is the of time the award should be off of the screen for. This is measured in ticks.
+   * Lifetime is the of time the award should be off of the screen for. This is measured in ticks.
    *
    * @see Tick
    * @return returns the lifetime.
@@ -38,12 +93,14 @@ public class BonusReward {
     return lifetime;
   }
 
+  // Constructor
+
   /**
    * isAlive is the boolean value to tell the game screen if this reward should be on screen.
    *
    * @return the value of isAlive
    */
-  public boolean getisAlive() {
+  public boolean getIsAlive() {
     return isAlive;
   }
 
@@ -61,48 +118,17 @@ public class BonusReward {
    *
    * @return the time in ticks that statetime holds
    */
-  public int getStatetime() {
-    return statetime;
+  public int getStateTime() {
+    return stateTime;
   }
 
   /**
    * Sets the statetime to a new value.
    *
-   * @param statetime time in ticks to set statetime to.
+   * @param stateTime time in ticks to set statetime to.
    */
-  public void setStatetime(int statetime) {
-    this.statetime = statetime;
-  }
-
-  // Constructor
-
-  /**
-   * Constructs a new BonusReward at the startX and startY. Gives the reward a random deadtime and
-   * lifetime along with creating a statetime using the current time in ticks.
-   *
-   * @see Tick
-   * @param upperBoundX
-   * @param upperBoundY
-   */
-  public BonusReward(int upperBoundX, int upperBoundY) {
-    count++;
-    Random rand = new Random();
-    int upperLimit = 320;
-    deadtime = rand.nextInt(upperLimit - 32) + 32;
-    lifetime = rand.nextInt(upperLimit - 32) + 32;
-    statetime = (Tick.instance().getTickRunning()) / 32;
-    int tileType = 1;
-    int randomX = 0;
-    int randomY = 0;
-    while (tileType > 0) {
-      // random from 1 - upperBoundX
-      randomX = rand.nextInt(upperBoundX - 1) + 1;
-      // creates random values from 1-upperBoundY
-      randomY = rand.nextInt(upperBoundY - 1) + 1;
-      tileType = theGrid.getTileAt(randomX, randomY);
-    }
-    this.x = randomX;
-    this.y = randomY;
+  public void setStateTime(int stateTime) {
+    this.stateTime = stateTime;
   }
 
   /**
@@ -142,11 +168,11 @@ public class BonusReward {
   }
 
   public float getPixelX() {
-    return x * theGrid.tileSize;
+    return x * TheGrid.tileSize;
   }
 
   public float getPixelY() {
-    return (y * theGrid.tileSize) + theGrid.topBuffer;
+    return (y * TheGrid.tileSize) + TheGrid.topBuffer;
   }
 
   /**
@@ -157,41 +183,6 @@ public class BonusReward {
    * @return if the location is the same as the reward or not.
    */
   public boolean locationEquals(float x, float y) {
-    if (this.getPixelX() == x && this.getPixelY() == y) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
-   * Checks if there is alreadu the maximum of bonus rewards allowed.
-   *
-   * @return whether the maximum amount of bonus rewards have been made or not.
-   */
-  public static boolean isExceeding() {
-    if (count > 4) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
-   * Add an object of type BonusReward to the bonus rewards list
-   *
-   * @param b BonusReward
-   */
-  public static void addToList(BonusReward b) {
-    bonusList.add(b);
-  }
-
-  /**
-   * Gets the bonus rewards list
-   *
-   * @return the bonus rewards list
-   */
-  public static ArrayList<BonusReward> getBonusList() {
-    return bonusList;
+    return this.getPixelX() == x && this.getPixelY() == y;
   }
 }

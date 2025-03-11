@@ -11,38 +11,25 @@ import org.newdawn.slick.state.*;
 
 /** The class leads to the drawing and updating of failure menu if the player loses */
 public class FailureMenu extends BasicGameState {
+  private static TrueTypeFont gothic;
   int xPos = 900 / 2;
   int yPos = 1100 / 2;
   Image exit;
   Image background;
   Image restart;
   Input input;
-
   // Placeholder score and time
   long currentTime;
   int timeCatch;
-
   // Font for score and time
   Font font;
-
-  private static TrueTypeFont gothic;
-
   Scoreboard sb = Scoreboard.getInstance();
 
-  /**
-   * Non default constructor for Failure menu.
-   *
-   * @param state of the failure menu on the game.
-   */
-  public FailureMenu(int state) {}
+  /** Non default constructor for Failure menu. */
+  public FailureMenu() {}
 
-  /**
-   * Gives the game state of the failure menu
-   *
-   * @return the game state
-   */
-  @Override
   /** returns the ID of the Failure menu state */
+  @Override
   public int getID() {
     return 6;
   }
@@ -52,7 +39,6 @@ public class FailureMenu extends BasicGameState {
    *
    * @param gc is the game container.
    * @param sbg is the state based game.
-   * @throws SlickException
    */
   public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
     // Placeholder background image
@@ -66,19 +52,17 @@ public class FailureMenu extends BasicGameState {
           Font.createFont(
                   Font.TRUETYPE_FONT, new File("src/main/resources/Gothic_Birthday_Cake.ttf"))
               .deriveFont(24f);
-    } catch (FontFormatException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (FontFormatException | IOException e) {
       e.printStackTrace();
     }
     gothic = new TrueTypeFont(font, true);
   }
 
-  @Override
   /**
    * Draws the image of the graphics including the background and options like exit,restart and exit
    * to main.
    */
+  @Override
   public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
     g.setFont(gothic);
 
@@ -90,8 +74,8 @@ public class FailureMenu extends BasicGameState {
     g.drawString("Time :        " + currentTime, xPos + 20, 400 + 20);
   }
 
-  @Override
   /** Updates the game and includes time catch which grabs the current time the game was paused. */
+  @Override
   public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
     input = gc.getInput();
 
@@ -123,8 +107,6 @@ public class FailureMenu extends BasicGameState {
   /**
    * Restarts the game with the original set up.
    *
-   * @param sbg
-   * @throws SlickException
    */
   public void restartGame(StateBasedGame sbg) throws SlickException {
     sbg.getState(1).init(sbg.getContainer(), sbg);

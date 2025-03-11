@@ -1,17 +1,15 @@
-import java.util.*;
 import java.util.ArrayList;
-import org.newdawn.slick.*;
 
 /**
  * The grid holds where everything. This is done by making eahc part of the 2-D array as a tile. The
  * grid is converted from pixels to single ints to keep track of a 40x18 grid.
  */
 public class TheGrid {
-  private static ArrayList<ArrayList<Tile>> grid = new ArrayList<ArrayList<Tile>>();
-  protected static int width;
-  protected static int height;
+  private static final ArrayList<ArrayList<Tile>> grid = new ArrayList<>();
   public static int topBuffer;
   public static int tileSize;
+  protected static int width;
+  protected static int height;
   private static boolean enteredEnd = false;
   private static boolean hasEncountered = false;
   Scoreboard sb = Scoreboard.getInstance();
@@ -23,56 +21,24 @@ public class TheGrid {
    * @param height the height of the grid
    */
   public TheGrid(int width, int height, int topBuffer, int tileSize) {
-    if (grid != null) {
-
       if (width > 0 && height > 0) {
-        this.width = width;
-        this.height = height;
+      TheGrid.width = width;
+      TheGrid.height = height;
       } else {
-        this.width = 1;
-        this.height = 1;
+      TheGrid.width = 1;
+      TheGrid.height = 1;
       }
-      this.topBuffer = topBuffer;
-      this.tileSize = tileSize;
-      for (int x = 0; x < this.width; x++) {
+    TheGrid.topBuffer = topBuffer;
+    TheGrid.tileSize = tileSize;
+    for (int x = 0; x < TheGrid.width; x++) {
         grid.add(new ArrayList<>());
-        for (int y = 0; y < this.height; y++) {
+      for (int y = 0; y < TheGrid.height; y++) {
           grid.get(x).add(new Tile(x, y, 0));
         }
       }
-    }
   }
 
   public TheGrid() {
-    if (grid == null) {
-
-      if (width > 0 && height > 0) {
-        this.width = width;
-        this.height = height;
-      } else {
-        this.width = 40;
-        this.height = 18;
-      }
-      this.topBuffer = 144;
-      this.tileSize = 32;
-      for (int x = 0; x < this.width; x++) {
-        grid.add(new ArrayList<>());
-        for (int y = 0; y < this.height; y++) {
-          grid.get(x).add(new Tile(x, y, 0));
-        }
-      }
-    }
-  }
-
-  /**
-   * Sets the tile to that type at the given coordinates.
-   *
-   * @param x the x coordinate.
-   * @param y the y coordinate.
-   * @param type the type to change the tile to.
-   */
-  public void setTileAt(int x, int y, int type) {
-    grid.get(x).get(y).setType(type);
   }
 
   /**
@@ -115,6 +81,17 @@ public class TheGrid {
   }
 
   /**
+   * Sets the tile to that type at the given coordinates.
+   *
+   * @param x the x coordinate.
+   * @param y the y coordinate.
+   * @param type the type to change the tile to.
+   */
+  public void setTileAt(int x, int y, int type) {
+    grid.get(x).get(y).setType(type);
+  }
+
+  /**
    * Same as getTileAt but accepts pixel coordinates instead. Converts x by dividing out the single
    * tile size. Converts y by removing the topBuffer and then dividing out the single tile size.
    *
@@ -124,7 +101,7 @@ public class TheGrid {
    */
   public Tile getPixelTileAt(float x, float y) {
     int trueX = ((int) x) / tileSize;
-    int minus = this.topBuffer;
+    int minus = topBuffer;
     int trueY = ((int) y - minus) / tileSize;
     return grid.get(trueX).get(trueY);
   }
@@ -134,7 +111,7 @@ public class TheGrid {
   }
 
   public void enterEnd() {
-    this.enteredEnd = true;
+    enteredEnd = true;
   }
 
   public boolean isHasEncountered() {
@@ -142,7 +119,7 @@ public class TheGrid {
   }
 
   public void encounter() {
-    this.hasEncountered = true;
+    hasEncountered = true;
   }
 
   /**
@@ -171,8 +148,6 @@ public class TheGrid {
   public void collisionHandling(float playerX, float playerY, float enemyX, float enemyY) {
     Tile t = getPixelTileAt(playerX, playerY);
     // normal reward
-    int x = t.getX();
-    int y = t.getY();
     if (t.getType() == 5) {
       sb.setScore(100);
       GameScreen.playReward = true;
@@ -222,8 +197,8 @@ public class TheGrid {
 
   /** Resets all the grid tiles back to 0 so it can be made again. */
   public void resetGrid() {
-    for (int x = 0; x < this.width; x++) {
-      for (int y = 0; y < this.height; y++) {
+    for (int x = 0; x < width; x++) {
+      for (int y = 0; y < height; y++) {
         grid.get(x).get(y).setType(0);
       }
     }

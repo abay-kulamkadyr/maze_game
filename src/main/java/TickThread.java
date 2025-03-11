@@ -1,8 +1,5 @@
 import static java.lang.System.nanoTime;
 
-import org.newdawn.slick.*;
-import org.newdawn.slick.state.*;
-
 /**
  * This class creates a thread with a name "TickThread" and calls singleton Tick class every 1/32
  * seconds and increases tick counter
@@ -32,7 +29,8 @@ class TickThread extends Thread {
       unprocessedSeconds = unprocessedSeconds + passedTime / 1000000000.0;
       while (unprocessedSeconds > secondsForEachTick) {
         unprocessedSeconds -= secondsForEachTick;
-        Tick.instance().increaseTick();
+        Tick.instance();
+        Tick.increaseTick();
       }
     }
   }

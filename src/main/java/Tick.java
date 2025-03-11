@@ -1,6 +1,3 @@
-import org.newdawn.slick.*;
-import org.newdawn.slick.state.*;
-
 /**
  * Tick class follows the singleton design pattern. To access it's only instance call
  * Tick.instance() method Has two private fields(tick, tickRunning) to count the number of tick has

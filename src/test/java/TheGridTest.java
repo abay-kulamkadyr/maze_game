@@ -8,7 +8,7 @@ public class TheGridTest {
   Scoreboard sb;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     sb = Scoreboard.getInstance();
     grid.resetGrid();
     sb.secretResetMethod();
@@ -17,25 +17,25 @@ public class TheGridTest {
   @Test
   public void setTileAt() {
     grid.setTileAt(10, 10, 2);
-    assertEquals(2, grid.getTileAt(10, 10));
+    assertEquals(2, TheGrid.getTileAt(10, 10));
   }
 
   @Test
   public void setTrueTileAt() {
-    grid.setTrueTileAt(320, 320, 2);
-    assertEquals(2, grid.getTileAt(10, 10));
+    TheGrid.setTrueTileAt(320, 320, 2);
+    assertEquals(2, TheGrid.getTileAt(10, 10));
   }
 
   @Test
   public void getPixelType() {
     grid.setTileAt(25, 25, 5);
-    assertEquals(5, grid.getPixelType(25 * 32, 25 * 32));
+    assertEquals(5, TheGrid.getPixelType(25 * 32, 25 * 32));
   }
 
   @Test
   public void getTileAt() {
     grid.setTileAt(1, 1, 8);
-    assertEquals(8, grid.getTileAt(1, 1));
+    assertEquals(8, TheGrid.getTileAt(1, 1));
   }
 
   @Test

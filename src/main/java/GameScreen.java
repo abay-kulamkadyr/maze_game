@@ -9,7 +9,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
  * The GameScreen runs the game and has the logic to play the game.
  *
  * <p>This keeps track of all the internal game logic due to the fact that we cannot access the
- * pixel values. This also does all of the drawing using the Slick2D library.
+ * pixel values. This also does all the drawing using the Slick2D library.
  *
  * @see BasicGameState
  * @author Group 19
@@ -19,13 +19,25 @@ public class GameScreen extends BasicGameState {
   public static boolean playReward;
   public static boolean playBonus;
   public static boolean playStat;
+  protected static boolean isPlaying = false;
+  private static boolean playScully;
   private final float width = 1280;
   private final float height = 720;
-  private float topBuffer = 144;
-  private float tileSize = 32;
-  private float gridWidth = width / tileSize; // 40
-  private float gridHeight = (height - topBuffer) / tileSize; // 18
-  private float gameHeight = (float) (720 * 0.8);
+  private final float topBuffer = 144;
+  private final float tileSize = 32;
+  private final float gridWidth = width / tileSize; // 40
+  private final float gridHeight = (height - topBuffer) / tileSize; // 18
+  // Switch out with TheGrid
+  private final TheGrid theGrid =
+      new TheGrid((int) gridWidth, (int) gridHeight, (int) topBuffer, (int) tileSize);
+  Player player1;
+  MovingEnemy enemy;
+  // Int value that holds whether the left shift has been pressed, and the gnome image for testing
+  int gnomePress;
+  Image gnome;
+  // barrier positions
+  ArrayList<Tile> barrierList = new ArrayList<>();
+  Scoreboard sb = Scoreboard.getInstance();
   private Image tile = null;
   private Image topWall = null;
   private Image bottomWall = null;
@@ -36,65 +48,33 @@ public class GameScreen extends BasicGameState {
   private Image bottomLeft = null;
   private Image bottomRight = null;
   private Image reward = null;
-
-  // private Image bonusreward=null;
   private Image hatch = null;
   private Image ladder = null;
   private Image scoreboard = null;
-  // private Image moveEnemy=null;
-  // private Image statEnemy=null;
-
-  // private Image player = null;
   private Animation bonusreward = null;
-  private SpriteSheet coinSheet;
   private Animation player = null;
   private SpriteSheet downSheet;
   private SpriteSheet leftSheet;
   private SpriteSheet upSheet;
   private SpriteSheet rightSheet;
   private Animation statEnemy;
-  private SpriteSheet skullSheet;
   private Animation moveEnemy;
   private SpriteSheet skeleSheet;
   private SpriteSheet skeleLeftSheet;
   private char lastInput;
   private Music bgm;
-  Player player1;
-  MovingEnemy enemy;
-  // Int value that holds whether the left shift has been pressed, and the gnome image for testing
-  int gnomePress;
-  Image gnome;
-
-  int xPos = 900 / 2;
-  int yPos = 1100 / 2;
-
-  // Switch out with TheGrid
-  private TheGrid theGrid =
-      new TheGrid((int) gridWidth, (int) gridHeight, (int) topBuffer, (int) tileSize);
-
-  // barrier positions
-  ArrayList<Tile> barrierList = new ArrayList<>();
-
   // reward position
   private boolean openExitDoor;
-  Scoreboard sb = Scoreboard.getInstance();
-  protected static boolean isPlaying = false;
   private Sound pop;
-
   private Sound pickupEffect;
   private Sound bonusEffect;
   private Sound statEffect;
-  private static boolean playScully;
   private Sound scullyEffect;
   private Sound gnomed;
   private int gnomeCount;
 
-  /**
-   * Creates a new game screen.
-   *
-   * @param state
-   */
-  public GameScreen(int state) {}
+  /** Creates a new game screen. */
+  public GameScreen() {}
 
   /**
    * Uses the Slick2D BasicGameState to create the game. Init is used 1 time for intialization of
@@ -126,9 +106,9 @@ public class GameScreen extends BasicGameState {
     rightSheet = new SpriteSheet("src/main/resources/rightSprite.png", 32, 32);
     upSheet = new SpriteSheet("src/main/resources/upSprite.png", 17, 32);
     skeleSheet = new SpriteSheet("src/main/resources/skeleSprite.png", 32, 32);
-    skullSheet = new SpriteSheet("src/main/resources/skullSprite.png", 32, 32);
+    SpriteSheet skullSheet = new SpriteSheet("src/main/resources/skullSprite.png", 32, 32);
     skeleLeftSheet = new SpriteSheet("src/main/resources/skeleSpriteLeft.png", 32, 32);
-    coinSheet = new SpriteSheet("src/main/resources/coinSheet.png", 32, 32);
+    SpriteSheet coinSheet = new SpriteSheet("src/main/resources/coinSheet.png", 32, 32);
     moveEnemy = new Animation(skeleSheet, 240);
     statEnemy = new Animation(skullSheet, 240);
     player = new Animation(rightSheet, 240);
@@ -197,8 +177,10 @@ public class GameScreen extends BasicGameState {
     // each group of
     // ticks
     getInput();
-    if (Tick.instance().getTick() > 4) {
-      Tick.instance().resetTick();
+    Tick.instance();
+    if (Tick.getTick() > 4) {
+      Tick.instance();
+      Tick.resetTick();
 
       char enemyDir = enemy.updateEnemy(player1.getGridX(), player1.getGridY());
       if (enemyDir == 'l') {
@@ -220,11 +202,11 @@ public class GameScreen extends BasicGameState {
         }
         moveEnemy.setCurrentFrame(frame);
       }
-      theGrid.setTrueTileAt(enemy.getXPosition(), enemy.getYPosition(), 3);
+      TheGrid.setTrueTileAt(enemy.getXPosition(), enemy.getYPosition(), 3);
 
       updateGame(lastInput);
 
-      theGrid.setTrueTileAt(player1.getXPosition(), player1.getYPosition(), 2);
+      TheGrid.setTrueTileAt(player1.getXPosition(), player1.getYPosition(), 2);
       if (enemy.getXPosition() == player1.getXPosition()
           && enemy.getYPosition() == player1.getYPosition()) {
         theGrid.collisionHandling(
@@ -232,12 +214,10 @@ public class GameScreen extends BasicGameState {
             player1.getYPosition(),
             enemy.getXPosition(),
             enemy.getYPosition());
-        // theGrid.playerHitsEnemy(player1.getGridX(), player1.getGridY(), enemy.getXPosition(),
-        //    enemy.getYPosition());
       }
       lastInput = '\0';
     }
-    theGrid.setTrueTileAt(enemy.getXPosition(), enemy.getYPosition(), 3);
+    TheGrid.setTrueTileAt(enemy.getXPosition(), enemy.getYPosition(), 3);
     if (playReward) {
       playReward = false;
       pickupEffect.play();
@@ -254,8 +234,6 @@ public class GameScreen extends BasicGameState {
       playScully = false;
       scullyEffect.play();
     }
-    // theGrid.playerHitsEnemy(player1.getGridX(), player1.getGridY(), enemy.getXPosition(),
-    // enemy.getYPosition());
     if (theGrid.isEnteredEnd() || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
       sb.pause();
       if (bgm.playing()) {
@@ -287,13 +265,13 @@ public class GameScreen extends BasicGameState {
 
   private void getInput() {
     // TODO: change it so the keyboard presses are all variables
-    if ((Keyboard.isKeyDown(player1.right))) {
+    if ((Keyboard.isKeyDown(Player.right))) {
       lastInput = 'r';
-    } else if ((Keyboard.isKeyDown(player1.down))) {
+    } else if ((Keyboard.isKeyDown(Player.down))) {
       lastInput = 'd';
-    } else if ((Keyboard.isKeyDown(player1.left))) {
+    } else if ((Keyboard.isKeyDown(Player.left))) {
       lastInput = 'l';
-    } else if ((Keyboard.isKeyDown(player1.up))) {
+    } else if ((Keyboard.isKeyDown(Player.up))) {
       lastInput = 'u';
     }
   }
@@ -309,7 +287,7 @@ public class GameScreen extends BasicGameState {
   @Override
   public void render(GameContainer gameContainer, StateBasedGame sbg, Graphics graphics)
       throws SlickException {
-    if (!bgm.playing() && isPlaying == false) {
+    if (!bgm.playing() && !isPlaying) {
       bgm.loop();
     }
     drawBoard();
@@ -406,7 +384,7 @@ public class GameScreen extends BasicGameState {
     Reward.addToList(new Reward(27 * tileSize, 15 * tileSize + topBuffer));
     Reward.addToList(new Reward(10 * tileSize, 1 * tileSize + topBuffer));
     for (Reward r : Reward.getRewardList()) {
-      theGrid.setTrueTileAt(r.getX(), r.getY(), 5);
+      TheGrid.setTrueTileAt(r.getX(), r.getY(), 5);
     }
   }
 
@@ -423,12 +401,12 @@ public class GameScreen extends BasicGameState {
     StationaryEnemy.addToList(new StationaryEnemy(30 * tileSize, 16 * tileSize + topBuffer));
     StationaryEnemy.addToList(new StationaryEnemy(37 * tileSize, 10 * tileSize + topBuffer));
     for (StationaryEnemy s : StationaryEnemy.getStationaryList()) {
-      theGrid.setTrueTileAt(s.getX(), s.getY(), 4);
+      TheGrid.setTrueTileAt(s.getX(), s.getY(), 4);
     }
   }
 
   /**
-   * Creates the bonus rewards. Each reward has a random location each time the game is ran. The
+   * Creates the bonus rewards. Each reward has a random location each time the game is run. The
    * while loop will run until all the rewards are made on valid spaces.
    *
    * @see BonusReward
@@ -461,10 +439,10 @@ public class GameScreen extends BasicGameState {
       {
         if (statEnemyIterator.isSetOnFire()) {
 
-          theGrid.setTrueTileAt(statEnemyIterator.getX(), statEnemyIterator.getY(), 0);
+          TheGrid.setTrueTileAt(statEnemyIterator.getX(), statEnemyIterator.getY(), 0);
         } else {
           statEnemy.draw(statEnemyIterator.getX(), statEnemyIterator.getY());
-          theGrid.setTrueTileAt(statEnemyIterator.getX(), statEnemyIterator.getY(), 4);
+          TheGrid.setTrueTileAt(statEnemyIterator.getX(), statEnemyIterator.getY(), 4);
         }
       }
     }
@@ -482,11 +460,11 @@ public class GameScreen extends BasicGameState {
     count = Reward.getRewardListSize();
     for (Reward rwd : Reward.getRewardList()) {
       if (rwd.isCollected()) {
-        theGrid.setTrueTileAt(rwd.getX(), rwd.getY(), 0);
+        TheGrid.setTrueTileAt(rwd.getX(), rwd.getY(), 0);
         count -= 1;
       } else {
         reward.draw(rwd.getX(), rwd.getY(), 2f);
-        theGrid.setTrueTileAt(rwd.getX(), rwd.getY(), 5);
+        TheGrid.setTrueTileAt(rwd.getX(), rwd.getY(), 5);
       }
     }
 
@@ -504,7 +482,7 @@ public class GameScreen extends BasicGameState {
    *
    * <p>If it is alive then it will check if the time it has been alive for is longer than it's
    * allowed time to be alive. If that is also true then it will be taken off the screen, isAlive
-   * will be switched to false and it's statetime will update. If it should still be alive then it
+   * will be switched to false, and it's state time will update. If it should still be alive then it
    * will be drawn and placed on theGrid.
    *
    * <p>If it is not alive then a check will be made to see if it has been dead long enough. If it
@@ -517,14 +495,16 @@ public class GameScreen extends BasicGameState {
 
     for (BonusReward brwd : BonusReward.getBonusList()) {
       if (brwd.isCollected()) {
-        theGrid.setTrueTileAt(brwd.getPixelX(), brwd.getPixelY(), 0);
+        TheGrid.setTrueTileAt(brwd.getPixelX(), brwd.getPixelY(), 0);
 
       } else {
-        if (brwd.getisAlive()) {
+        if (brwd.getIsAlive()) {
 
-          if (Tick.instance().getTickRunning() - brwd.getStatetime() > brwd.getLifetime()) {
+          Tick.instance();
+          if (Tick.getTickRunning() - brwd.getStateTime() > brwd.getLifetime()) {
             brwd.setAlive(false);
-            brwd.setStatetime(Tick.instance().getTickRunning());
+            Tick.instance();
+            brwd.setStateTime(Tick.getTickRunning());
           } else {
             int brwdX = brwd.getX();
             int brwdY = brwd.getY();
@@ -532,9 +512,11 @@ public class GameScreen extends BasicGameState {
             bonusreward.draw(brwd.getPixelX(), brwd.getPixelY());
           }
         } else {
-          if (Tick.instance().getTickRunning() - brwd.getStatetime() > brwd.getDeadtime()) {
+          Tick.instance();
+          if (Tick.getTickRunning() - brwd.getStateTime() > brwd.getDeadTime()) {
             brwd.setAlive(true);
-            brwd.setStatetime(Tick.instance().getTickRunning());
+            Tick.instance();
+            brwd.setStateTime(Tick.getTickRunning());
           }
         }
       }
@@ -552,20 +534,20 @@ public class GameScreen extends BasicGameState {
         for (float y = 0; y < gridHeight; y++) {
           if (y == 0) {
             topLeft.draw(tileSize * x, tileSize * y + topBuffer, 2f);
-            theGrid.setTileAt((int) x, (int) y, 1);
+            theGrid.setTileAt(0, 0, 1);
           } else if (y == gridHeight - 1) {
             bottomLeft.draw(tileSize * x, tileSize * y + topBuffer, 2f);
-            theGrid.setTileAt((int) x, (int) y, 1);
+            theGrid.setTileAt(0, (int) y, 1);
           } else {
             leftWall.draw(tileSize * x, tileSize * y + topBuffer, 2f);
-            theGrid.setTileAt((int) x, (int) y, 1);
+            theGrid.setTileAt(0, (int) y, 1);
           }
         }
       } else if (x == gridWidth - 1) {
         for (float y = 0; y < gridHeight; y++) {
           if (y == 0) {
             topRight.draw(tileSize * x, tileSize * y + topBuffer, 2f);
-            theGrid.setTileAt((int) x, (int) y, 1);
+            theGrid.setTileAt((int) x, 0, 1);
           } else if (y == gridHeight - 1) {
             bottomRight.draw(tileSize * x, tileSize * y + topBuffer, 2f);
             theGrid.setTileAt((int) x, (int) y, 1);
@@ -578,7 +560,7 @@ public class GameScreen extends BasicGameState {
         for (float y = 0; y < gridHeight; y++) {
           if (y == 0) {
             topWall.draw(tileSize * x, tileSize * y + topBuffer, 2f);
-            theGrid.setTileAt((int) x, (int) y, 1);
+            theGrid.setTileAt((int) x, 0, 1);
           } else if (y == gridHeight - 1) {
             bottomWall.draw(tileSize * x, tileSize * y + topBuffer, 2f);
             theGrid.setTileAt((int) x, (int) y, 1);
@@ -603,7 +585,7 @@ public class GameScreen extends BasicGameState {
   }
 
   /**
-   * Function to update the game based on player input. Then it wil check if the player if moving
+   * Function to update the game based on player input. Then it wil check if the player is moving
    * into a tile that is not a wall. After that if the tile is >2 then that means it will require
    * some kind of collision handling to happen before the player can move.
    *
@@ -614,8 +596,8 @@ public class GameScreen extends BasicGameState {
   public void updateGame(char dir) {
 
     if (dir == 'u') {
-      if (theGrid.getPixelType(player1.getXPosition(), player1.getYPosition() - tileSize) != 1) {
-        if (theGrid.getPixelType(player1.getXPosition(), player1.getYPosition() - tileSize) > 2) {
+      if (TheGrid.getPixelType(player1.getXPosition(), player1.getYPosition() - tileSize) != 1) {
+        if (TheGrid.getPixelType(player1.getXPosition(), player1.getYPosition() - tileSize) > 2) {
           theGrid.collisionHandling(
               player1.getXPosition(),
               player1.getYPosition() - tileSize,
@@ -623,21 +605,11 @@ public class GameScreen extends BasicGameState {
               enemy.getYPosition());
         }
 
-        player1.move(dir);
-
-        int frame = player.getFrame();
-        player = new Animation(upSheet, 240);
-        if (frame < player.getFrameCount() - 1) {
-          frame += 1;
-        } else {
-          frame = 0;
-        }
-        player.setCurrentFrame(frame);
-        player.start();
+        updatePlayerMovementAndAnimation(dir, upSheet);
       }
     } else if (dir == 'l') {
-      if (theGrid.getPixelType(player1.getXPosition() - tileSize, player1.getYPosition()) != 1) {
-        if (theGrid.getPixelType(player1.getXPosition() - tileSize, player1.getYPosition()) > 2) {
+      if (TheGrid.getPixelType(player1.getXPosition() - tileSize, player1.getYPosition()) != 1) {
+        if (TheGrid.getPixelType(player1.getXPosition() - tileSize, player1.getYPosition()) > 2) {
           theGrid.collisionHandling(
               player1.getXPosition() - tileSize,
               player1.getYPosition(),
@@ -645,61 +617,47 @@ public class GameScreen extends BasicGameState {
               enemy.getYPosition());
         }
 
-        player1.move(dir);
-
-        int frame = player.getFrame();
-        player = new Animation(leftSheet, 240);
-        if (frame < player.getFrameCount() - 1) {
-          frame += 1;
-        } else {
-          frame = 0;
-        }
-        player.setCurrentFrame(frame);
-        player.start();
+        updatePlayerMovementAndAnimation(dir, leftSheet);
       }
     } else if (dir == 'd') {
-      if (theGrid.getPixelType(player1.getXPosition(), player1.getYPosition() + tileSize) != 1) {
-        if (theGrid.getPixelType(player1.getXPosition(), player1.getYPosition() + tileSize) > 2) {
+      if (TheGrid.getPixelType(player1.getXPosition(), player1.getYPosition() + tileSize) != 1) {
+        if (TheGrid.getPixelType(player1.getXPosition(), player1.getYPosition() + tileSize) > 2) {
           theGrid.collisionHandling(
               player1.getXPosition(),
               player1.getYPosition() + tileSize,
               enemy.getXPosition(),
               enemy.getYPosition());
         }
-        player1.move(dir);
-        int frame = player.getFrame();
-        player = new Animation(downSheet, 240);
-        if (frame < player.getFrameCount() - 1) {
-          frame += 1;
-        } else {
-          frame = 0;
-        }
-        player.setCurrentFrame(frame);
-        player.start();
+        updatePlayerMovementAndAnimation(dir, downSheet);
       }
     } else if (dir == 'r') {
-      if (theGrid.getPixelType(player1.getXPosition() + tileSize, player1.getYPosition()) != 1) {
-        if (theGrid.getPixelType(player1.getXPosition() + tileSize, player1.getYPosition()) > 2) {
+      if (TheGrid.getPixelType(player1.getXPosition() + tileSize, player1.getYPosition()) != 1) {
+        if (TheGrid.getPixelType(player1.getXPosition() + tileSize, player1.getYPosition()) > 2) {
           theGrid.collisionHandling(
               player1.getXPosition() + tileSize,
               player1.getYPosition(),
               enemy.getXPosition(),
               enemy.getYPosition());
         }
-        player1.move(dir);
-        int frame = player.getFrame();
-        player = new Animation(rightSheet, 240);
-        if (frame < player.getFrameCount() - 1) {
-          frame += 1;
-        } else {
-          frame = 0;
-        }
-        player.setCurrentFrame(frame);
-        player.start();
+        updatePlayerMovementAndAnimation(dir, rightSheet);
       }
     } else {
       player.stop();
       player.restart();
     }
+  }
+
+  private void updatePlayerMovementAndAnimation(char dir, SpriteSheet upSheet) {
+    player1.move(dir);
+
+    int frame = player.getFrame();
+    player = new Animation(upSheet, 240);
+    if (frame < player.getFrameCount() - 1) {
+      frame += 1;
+    } else {
+      frame = 0;
+    }
+    player.setCurrentFrame(frame);
+    player.start();
   }
 }

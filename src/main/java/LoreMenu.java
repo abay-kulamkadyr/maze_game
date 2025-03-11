@@ -15,17 +15,15 @@ public class LoreMenu extends BasicGameState {
   Animation kikiWalks;
   SpriteSheet scullySheet;
   Animation scullyWalks;
-  private SpriteSheet skullSheet;
   private Animation skullWalks;
   float animationX = 210;
   float animationY = 400;
 
   private int slide = 0;
-  private int list = 2;
 
   Input input;
 
-  public LoreMenu(int state) {}
+  public LoreMenu() {}
 
   public int getID() {
     return 2;
@@ -36,13 +34,13 @@ public class LoreMenu extends BasicGameState {
 
     bg = new Image("src/main/resources/LoreBG.png");
     kiki = new Image("src/main/resources/LoreKiki.png");
-    scully = new Image("src/main/resources/LoreSC.png");
+    scully = new Image("src/main/resources/LoreSc.png");
     ef = new Image("src/main/resources/LoreEF.png");
     kikiSheet = new SpriteSheet("src/main/resources/kikiSprite.png", 66, 125);
     kikiWalks = new Animation(kikiSheet, 240);
     scullySheet = new SpriteSheet("src/main/resources/homieSprite.png", 125, 125);
     scullyWalks = new Animation(scullySheet, 240);
-    skullSheet = new SpriteSheet("src/main/resources/homiesHomieSprite.png", 125, 125);
+    SpriteSheet skullSheet = new SpriteSheet("src/main/resources/homiesHomieSprite.png", 125, 125);
     skullWalks = new Animation(skullSheet, 240);
   }
 
@@ -80,6 +78,7 @@ public class LoreMenu extends BasicGameState {
         game.enterState(0, new FadeOutTransition(), new FadeInTransition());
       }
     }
+    int list = 2;
     if ((mouseX > xPrev && mouseX < xNext) && (mouseY > yArrows - 85 && mouseY < yArrows)) {
       if (input.isMousePressed(0)) {
 

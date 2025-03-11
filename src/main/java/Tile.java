@@ -56,11 +56,7 @@ public class Tile {
    * @return returns if the coordinates are the same.
    */
   public boolean locationEquals(float x, float y) {
-    if (this.x == x && this.y == y) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.x == x && this.y == y;
   }
 
   /**
@@ -70,10 +66,7 @@ public class Tile {
    * @return returns if the 2 tiles are the same or not.
    */
   public boolean equals(Tile t) {
-    if (t.getType() == type && t.x == x && t.y == y) {
-      return true;
-    }
-    return false;
+    return t.getType() == type && t.x == x && t.y == y;
   }
 
   public int getX() {

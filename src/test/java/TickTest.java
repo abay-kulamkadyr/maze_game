@@ -12,31 +12,40 @@ public class TickTest {
 
   @Test
   public void reset() {
-    Tick.instance().resetTick();
-    assertEquals(0, Tick.instance().getTick());
+    Tick.instance();
+    Tick.resetTick();
+    Tick.instance();
+    assertEquals(0, Tick.getTick());
   }
 
   @Test
   public void timeElapsed() {
     try {
-      Thread.sleep((long) 32);
+      Thread.sleep(32);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-    assertEquals(Tick.instance().getTick(), 1);
+    Tick.instance();
+    assertEquals(1, Tick.getTick());
   }
 
   @Test
   public void increaseTick() {
-    int previous = Tick.instance().getTick();
-    Tick.instance().increaseTick();
-    assertEquals(Tick.instance().getTick() - previous, 1);
+    Tick.instance();
+    int previous = Tick.getTick();
+    Tick.instance();
+    Tick.increaseTick();
+    Tick.instance();
+    assertEquals(1, Tick.getTick() - previous);
   }
 
   @Test
   public void increaseRunningTick() {
-    int previous = Tick.instance().getTickRunning();
-    Tick.instance().increaseTick();
-    assertEquals(Tick.instance().getTickRunning(), previous + 1);
+    Tick.instance();
+    int previous = Tick.getTickRunning();
+    Tick.instance();
+    Tick.increaseTick();
+    Tick.instance();
+    assertEquals(Tick.getTickRunning(), previous + 1);
   }
 }

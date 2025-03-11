@@ -6,7 +6,6 @@ import org.junit.Test;
 public class MovingEnemyTest {
 
   MovingEnemy skully;
-  TheGrid theGrid = new TheGrid(300, 300, 0, 32);
 
   @Before
   public void setUp() {

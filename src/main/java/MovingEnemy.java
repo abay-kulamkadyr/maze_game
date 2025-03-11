@@ -5,12 +5,10 @@ import java.util.Random;
 
 /** Moving enemy Class implements the Character interface */
 public class MovingEnemy implements Character {
+  public String availableMoveS = "udlr";
+  public ArrayList<java.lang.Character> availableMovesConvert = new ArrayList<>();
   float x;
   float y;
-  public String availableMoveS = "udlr";
-  public ArrayList<java.lang.Character> availableMovesConvert =
-      new ArrayList<java.lang.Character>();
-  TheGrid theGrid = new TheGrid();
 
   /**
    * @param startX Set the initial X coordinate of a new instance of MovingEnemy
@@ -37,7 +35,7 @@ public class MovingEnemy implements Character {
     } else if (dir == 'd') {
       y = y + 32;
     }
-    theGrid.setTrueTileAt(x, y, 3);
+    TheGrid.setTrueTileAt(x, y, 3);
   }
 
   /**
@@ -48,17 +46,17 @@ public class MovingEnemy implements Character {
   }
 
   /**
-   * @return returns current Y position of the moving enemy
-   */
-  public float getYPosition() {
-    return y;
-  }
-
-  /**
    * @param x set the X coordinate to x
    */
   public void setXPosition(float x) {
     this.x = x;
+  }
+
+  /**
+   * @return returns current Y position of the moving enemy
+   */
+  public float getYPosition() {
+    return y;
   }
 
   /**
@@ -82,7 +80,7 @@ public class MovingEnemy implements Character {
    * @param move a character to remove from the set of available movements
    */
   public void removeAvailableMoves(char move) {
-    boolean remove = this.availableMovesConvert.remove(new java.lang.Character(move));
+    this.availableMovesConvert.remove(new java.lang.Character(move));
   }
 
   /** resets to the initial set of available movements */
@@ -106,10 +104,6 @@ public class MovingEnemy implements Character {
 
   /** A method for updating the position of the moving enemy in every 4 ticks. */
   public char updateEnemy(int xPosPlayer, int yPosPlayer) {
-    /**
-     * Check whether an adjacent cell of the moving enemy is a wall if that is the case, remove the
-     * enemy's available movements on that direction (initially available movements are "uldr")
-     */
     if ((TheGrid.getPixelType(this.getXPosition(), this.getYPosition() - 32)) == 1) {
       this.removeAvailableMoves('u');
     }
@@ -122,39 +116,8 @@ public class MovingEnemy implements Character {
     if (TheGrid.getPixelType(this.getXPosition() + 32, this.getYPosition()) == 1) {
       this.removeAvailableMoves('r');
     }
-    /**
-     * heuristicValues array keeps track of heuristic values of the enemy position heuristic values
-     * are the shortest distance of the enemy to the player
-     */
     char BestMove;
-    ArrayList<Integer> heuristicValues = new ArrayList<Integer>(this.availableMovesConvert.size());
-    for (int i = 0; i < this.availableMovesConvert.size(); i++) {
-      /**
-       * Check the enemy heuristic values if the enemy was on the available cell and store the value
-       * inside the heuristicValue arraylist.
-       */
-      if (this.availableMovesConvert.get(i) == 'u') {
-        // getting coordinates of the player and enemy on the board
-        MovingEnemy newState = new MovingEnemy(this.getXPosition(), this.getYPosition() - 32);
-        heuristicValues.add(newState.heuristic(xPosPlayer, yPosPlayer));
-
-      } else if (this.availableMovesConvert.get(i) == 'l') {
-
-        MovingEnemy newState = new MovingEnemy(this.getXPosition() - 32, this.getYPosition());
-        heuristicValues.add(newState.heuristic(xPosPlayer, yPosPlayer));
-      } else if (this.availableMovesConvert.get(i) == 'd') {
-
-        MovingEnemy newState = new MovingEnemy(this.getXPosition(), this.getYPosition() + 32);
-        heuristicValues.add(newState.heuristic(xPosPlayer, yPosPlayer));
-      } else if (this.availableMovesConvert.get(i) == 'r') {
-        MovingEnemy newState = new MovingEnemy(this.getXPosition() + 32, this.getYPosition());
-        heuristicValues.add(newState.heuristic(xPosPlayer, yPosPlayer));
-      }
-    }
-    /**
-     * get the minimum value from the heuristicValues arraylist list and map to it's corresponding
-     * movement into bestMove the enemy moves according to the bestMove value
-     */
+    ArrayList<Integer> heuristicValues = getIntegers(xPosPlayer, yPosPlayer);
     int min = heuristicValues.get(0);
     for (int j = 1; j < heuristicValues.size(); j++) {
       if (heuristicValues.get(j) < min) {
@@ -168,5 +131,29 @@ public class MovingEnemy implements Character {
     char dir = BestMove;
     this.resetMoves();
     return dir;
+  }
+
+  private ArrayList<Integer> getIntegers(int xPosPlayer, int yPosPlayer) {
+    ArrayList<Integer> heuristicValues = new ArrayList<>(this.availableMovesConvert.size());
+    for (java.lang.Character character : this.availableMovesConvert) {
+      if (character == 'u') {
+        // getting coordinates of the player and enemy on the board
+        MovingEnemy newState = new MovingEnemy(this.getXPosition(), this.getYPosition() - 32);
+        heuristicValues.add(newState.heuristic(xPosPlayer, yPosPlayer));
+
+      } else if (character == 'l') {
+
+        MovingEnemy newState = new MovingEnemy(this.getXPosition() - 32, this.getYPosition());
+        heuristicValues.add(newState.heuristic(xPosPlayer, yPosPlayer));
+      } else if (character == 'd') {
+
+        MovingEnemy newState = new MovingEnemy(this.getXPosition(), this.getYPosition() + 32);
+        heuristicValues.add(newState.heuristic(xPosPlayer, yPosPlayer));
+      } else if (character == 'r') {
+        MovingEnemy newState = new MovingEnemy(this.getXPosition() + 32, this.getYPosition());
+        heuristicValues.add(newState.heuristic(xPosPlayer, yPosPlayer));
+      }
+    }
+    return heuristicValues;
   }
 }

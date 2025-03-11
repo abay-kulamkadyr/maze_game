@@ -12,6 +12,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 /** Creates the Pause menu for the Nazareth game. */
 public class Pause extends BasicGameState {
+  private static TrueTypeFont gothic;
   int xPos = 900 / 2;
   int yPos = 1100 / 2;
   Image exit;
@@ -20,30 +21,27 @@ public class Pause extends BasicGameState {
   Image back;
   long currentTime;
   int timeCatch;
-  Input input;
 
   // Placeholder score and time
-
+  Input input;
   Scoreboard sb = Scoreboard.getInstance();
-
   // Font for score and time
   Font font;
-  private static TrueTypeFont gothic;
 
   /** Non default constructor for the Pause which takes in state as a parameter. */
-  public Pause(int state) {}
+  public Pause() {}
 
-  @Override
   /** returns the id of the Pause menu state */
+  @Override
   public int getID() {
     return 4;
   }
 
-  @Override
   /**
    * Initializes all the resources for the Pause menu state like the background image,exit
    * button,restart button,back button and the times that creates the font type of Times New Roman
    */
+  @Override
   public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
     // Placeholder background image
     background = new Image("src/main/resources/pauseBG.png");
@@ -51,7 +49,7 @@ public class Pause extends BasicGameState {
     exit = new Image("src/main/resources/ExittoMain.png");
     // Restart button
     restart = new Image("src/main/resources/Restart Level.png");
-    back = new Image("src/main/resources/back.png");
+    back = new Image("src/main/resources/Back.png");
     try {
       font =
           Font.createFont(
@@ -65,11 +63,11 @@ public class Pause extends BasicGameState {
     gothic = new TrueTypeFont(font, true);
   }
 
-  @Override
   /**
    * Sets the font as Times New roman and draws the images of the graphics with Score and Time
    * encapsulated inside it. Draws exit,restart and back button.
    */
+  @Override
   public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
     g.setFont(gothic);
 
@@ -82,10 +80,10 @@ public class Pause extends BasicGameState {
     g.drawString("Time :        " + currentTime, xPos, 240 + 64);
   }
 
-  @Override
   /**
    * Updates the game screen by specifying if exit button is clicked or the back button is clicked.
    */
+  @Override
   public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
     input = gc.getInput();
 
@@ -134,8 +132,6 @@ public class Pause extends BasicGameState {
   /**
    * Restarts the game with the original set up.
    *
-   * @param sbg
-   * @throws SlickException
    */
   public void restartGame(StateBasedGame sbg) throws SlickException {
     sbg.getState(1).init(sbg.getContainer(), sbg);

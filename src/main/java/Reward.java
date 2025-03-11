@@ -1,4 +1,3 @@
-import java.util.*;
 import java.util.ArrayList;
 
 /**
@@ -6,12 +5,11 @@ import java.util.ArrayList;
  * class.
  */
 public class Reward {
+  private static final ArrayList<Reward> rewardList = new ArrayList<>();
+  private final float x;
+  private final float y;
   public int value = 100;
-  private float x;
-  private float y;
   private boolean collected = false;
-  private TheGrid theGrid = new TheGrid();
-  private static ArrayList<Reward> rewardList = new ArrayList<>();
 
   /**
    * Non default constructor to store the x and y values.
@@ -22,6 +20,38 @@ public class Reward {
   public Reward(float startX, float startY) {
     this.x = startX;
     this.y = startY;
+  }
+
+  /**
+   * Add an object of type Reward to the reward list
+   *
+   * @param b Reward
+   */
+  public static void addToList(Reward b) {
+    rewardList.add(b);
+  }
+
+  /**
+   * Get the current size of the reward list
+   *
+   * @return value of the total number of rewards
+   */
+  public static int getRewardListSize() {
+    return rewardList.size();
+  }
+
+  /**
+   * Get the rewards list
+   *
+   * @return the rewards list
+   */
+  public static ArrayList<Reward> getRewardList() {
+    return rewardList;
+  }
+
+  /** Removes all the elements from the reward list */
+  public static void resetRewardList() {
+    rewardList.clear();
   }
 
   /** Changing the collected value to true once the reward is collected by the player. */
@@ -57,42 +87,7 @@ public class Reward {
    * coordinated inputted from the parameter
    */
   public boolean locationEquals(float x, float y) {
-    if (this.x == x && this.y == y) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.x == x && this.y == y;
   }
 
-  /**
-   * Add an object of type Reward to the reward list
-   *
-   * @param b Reward
-   */
-  public static void addToList(Reward b) {
-    rewardList.add(b);
-  }
-
-  /**
-   * Get the current size of the reward list
-   *
-   * @return value of the total number of rewards
-   */
-  public static int getRewardListSize() {
-    return rewardList.size();
-  }
-
-  /**
-   * Get the rewards list
-   *
-   * @return the rewards list
-   */
-  public static ArrayList<Reward> getRewardList() {
-    return rewardList;
-  }
-
-  /** Removes all the elements from the reward list */
-  public static void resetRewardList() {
-    rewardList.clear();
-  }
 }

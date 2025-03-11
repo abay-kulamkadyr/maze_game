@@ -66,25 +66,25 @@ public class PlayerTest {
 
   @Test
   public void testUpKey() {
-    jim.setUpKey(Keyboard.KEY_E);
-    assertEquals(Keyboard.KEY_E, jim.up);
+    Player.setUpKey(Keyboard.KEY_E);
+    assertEquals(Keyboard.KEY_E, Player.up);
   }
 
   @Test
   public void testDownKey() {
-    jim.setDownKey(Keyboard.KEY_D);
-    assertEquals(Keyboard.KEY_D, jim.down);
+    Player.setDownKey(Keyboard.KEY_D);
+    assertEquals(Keyboard.KEY_D, Player.down);
   }
 
   @Test
   public void testLeftKey() {
-    jim.setLeftKey(Keyboard.KEY_S);
-    assertEquals(Keyboard.KEY_S, jim.left);
+    Player.setLeftKey(Keyboard.KEY_S);
+    assertEquals(Keyboard.KEY_S, Player.left);
   }
 
   @Test
   public void testRightKey() {
-    jim.setRightKey(Keyboard.KEY_F);
-    assertEquals(Keyboard.KEY_F, jim.right);
+    Player.setRightKey(Keyboard.KEY_F);
+    assertEquals(Keyboard.KEY_F, Player.right);
   }
 }

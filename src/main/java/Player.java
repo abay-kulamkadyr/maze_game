@@ -1,16 +1,13 @@
 import org.lwjgl.input.Keyboard;
-import org.newdawn.slick.*;
-import org.newdawn.slick.state.*;
 
 /** The player that the user will control. Player hold's it's own location. */
 public class Player implements Character {
-  float x;
-  float y;
-
   protected static int up = Keyboard.KEY_W;
   protected static int left = Keyboard.KEY_A;
   protected static int right = Keyboard.KEY_D;
   protected static int down = Keyboard.KEY_S;
+  float x;
+  float y;
 
   /**
    * Creates a new player and assigns it coordinates.
@@ -21,6 +18,22 @@ public class Player implements Character {
   public Player(float startX, float startY) {
     this.x = startX;
     this.y = startY;
+  }
+
+  public static void setUpKey(int key) {
+    up = key;
+  }
+
+  public static void setDownKey(int key) {
+    down = key;
+  }
+
+  public static void setLeftKey(int key) {
+    left = key;
+  }
+
+  public static void setRightKey(int key) {
+    right = key;
   }
 
   /**
@@ -48,10 +61,28 @@ public class Player implements Character {
   }
 
   /**
+   * sets the x coordinate to a new x.
+   *
+   * @param x set the x coordinate to x
+   */
+  public void setXPosition(float x) {
+    this.x = x;
+  }
+
+  /**
    * @return returns the y position.
    */
   public float getYPosition() {
     return y;
+  }
+
+  /**
+   * sets the y coordinate to a new y.
+   *
+   * @param y set the x coordinate to y
+   */
+  public void setYPosition(float y) {
+    this.y = y;
   }
 
   /**
@@ -72,39 +103,5 @@ public class Player implements Character {
    */
   public int getGridY() {
     return ((int) y - 144) / 32;
-  }
-
-  /**
-   * sets the x coordinate to a new x.
-   *
-   * @param x set the x coordinate to x
-   */
-  public void setXPosition(float x) {
-    this.x = x;
-  }
-
-  /**
-   * sets the y coordinate to a new y.
-   *
-   * @param y set the x coordinate to y
-   */
-  public void setYPosition(float y) {
-    this.y = y;
-  }
-
-  public static void setUpKey(int key) {
-    up = key;
-  }
-
-  public static void setDownKey(int key) {
-    down = key;
-  }
-
-  public static void setLeftKey(int key) {
-    left = key;
-  }
-
-  public static void setRightKey(int key) {
-    right = key;
   }
 }

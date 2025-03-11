@@ -16,37 +16,30 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
  * player wins.
  */
 public class VictoryMenu extends BasicGameState {
+  private static TrueTypeFont gothic;
   int xPos = 900 / 2;
   int yPos = 1100 / 2;
   Image exit;
   Image background;
   Image exitToMain;
   Input input;
-
   // Placeholder score and time
   long currentTime;
   int timeCatch;
   // Font for score and time
   Font font;
-  private static TrueTypeFont gothic;
-
   Scoreboard sb = Scoreboard.getInstance();
 
-  /**
-   * Non default constructor to know the state of the VictoryMenu
-   *
-   * @param state of the Victory Menu
-   */
-  public VictoryMenu(int state) {}
+  /** Non default constructor to know the state of the VictoryMenu */
+  public VictoryMenu() {}
 
-  @Override
   /** returns the ID of the VictoryMenu state. */
+  @Override
   public int getID() {
 
     return 5;
   }
 
-  @Override
   /**
    * * Initializes all the resources for the victory menu like exit,restart,exitToMain.The times
    * which decides the font.
@@ -54,6 +47,7 @@ public class VictoryMenu extends BasicGameState {
    * @param gc Game container of the game
    * @param sbg state based game
    */
+  @Override
   public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
     // Placeholder background image
     background = new Image("src/main/resources/victoryBG.png");
@@ -74,12 +68,12 @@ public class VictoryMenu extends BasicGameState {
     gothic = new TrueTypeFont(font, true);
   }
 
-  @Override
   /**
    * Sets the font as Times New roman and draws the images of the graphics with Score and Time
    * encapsulated inside it. Draws the background image along with the the images of exit,restart
    * and exitToMain.
    */
+  @Override
   public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
     g.setFont(gothic);
 
@@ -88,15 +82,15 @@ public class VictoryMenu extends BasicGameState {
 
     exitToMain.draw(xPos, yPos - 84);
 
-    g.drawString("Score :        " + sb.getScore(), xPos - 7, 720 / 2 - 48);
-    g.drawString("Time :        " + currentTime, xPos, ((720 / 2)));
+    g.drawString("Score :        " + sb.getScore(), xPos - 7, (float) 720 / 2 - 48);
+    g.drawString("Time :        " + currentTime, xPos, (((float) 720 / 2)));
   }
 
-  @Override
   /**
    * Updates the game screen by specifying if exit button is clicked or the restart button is
    * clicked.
    */
+  @Override
   public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
     input = gc.getInput();
 

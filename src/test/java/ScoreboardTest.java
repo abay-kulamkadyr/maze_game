@@ -3,7 +3,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class ScoreboardTest {
-  private Scoreboard sbTest = new Scoreboard();
+  private final Scoreboard sbTest = new Scoreboard();
 
   @Test
   public void score() {
@@ -83,6 +83,6 @@ public class ScoreboardTest {
   @Test
   public void createdSingleton() {
     Scoreboard singleTest = Scoreboard.getInstance();
-    assertTrue(singleTest instanceof Scoreboard);
+    assertNotNull(singleTest);
   }
 }

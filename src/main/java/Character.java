@@ -5,33 +5,33 @@ public interface Character {
    *
    * @param dir this direction will decide how x and y change
    */
-  public void move(char dir);
+  void move(char dir);
 
   /**
    * Gets the X position of the character
    *
    * @return the X position of the character
    */
-  public float getXPosition();
-
-  /**
-   * Gets the Y position of the character
-   *
-   * @return the Y position of the character
-   */
-  public float getYPosition();
+  float getXPosition();
 
   /**
    * Sets the X coordinate of the player
    *
    * @param x set the X coordinate to x
    */
-  public void setXPosition(float x);
+  void setXPosition(float x);
+
+  /**
+   * Gets the Y position of the character
+   *
+   * @return the Y position of the character
+   */
+  float getYPosition();
 
   /**
    * Sets the Y coordinate of the player
    *
    * @param y set the Y coordinate to y
    */
-  public void setYPosition(float y);
+  void setYPosition(float y);
 }

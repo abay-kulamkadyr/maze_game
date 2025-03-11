@@ -7,7 +7,6 @@ public class BonusRewardTest {
   BonusReward bonus;
   float x = 2;
   float y = 2;
-  TheGrid theGrid = new TheGrid(100, 100, 0, 32);
 
   @Before
   public void setup() {
@@ -18,7 +17,7 @@ public class BonusRewardTest {
 
   @Test
   public void getDeadTime() {
-    int t = bonus.getDeadtime();
+    int t = bonus.getDeadTime();
     assertTrue(32 <= t && t <= 320);
   }
 
@@ -29,9 +28,9 @@ public class BonusRewardTest {
   }
 
   @Test
-  public void getisAlive() {
-    boolean l = bonus.getisAlive();
-    assertEquals(false, l);
+  public void getIsAlive() {
+    boolean l = bonus.getIsAlive();
+    assertFalse(l);
   }
 
   @Test
@@ -41,13 +40,13 @@ public class BonusRewardTest {
 
   @Test
   public void getStatetime() {
-    int c = bonus.getStatetime();
+    int c = bonus.getStateTime();
     assertEquals(0, c);
   }
 
   @Test
   public void setStatetime() {
-    bonus.setStatetime(0);
+    bonus.setStateTime(0);
   }
 
   @Test
@@ -74,36 +73,37 @@ public class BonusRewardTest {
     float bonusY = bonus.getPixelY();
     boolean output1 = bonus.locationEquals(bonusX, bonusY);
     // Test the output
-    assertEquals(true, output1);
+    assertTrue(output1);
   }
 
   @Test
   public void locationEqualsFalse() {
     boolean output1 = bonus.locationEquals((float) 15, (float) 10);
     // Test the output
-    assertEquals(false, output1);
+    assertFalse(output1);
   }
 
   @Test
   public void isExceeding() {
-    boolean output2 = bonus.isExceeding();
+    boolean output2 = BonusReward.isExceeding();
     // Test the output
-    assertEquals(false, output2);
+    assertFalse(output2);
   }
 
   @Test
   public void isExceedingFalse() {
-    BonusReward brd = new BonusReward(4, 5);
-    BonusReward brd2 = new BonusReward(7, 8);
-    BonusReward brd3 = new BonusReward(10, 12);
-    BonusReward brd4 = new BonusReward(20, 30);
-    boolean output2 = bonus.isExceeding();
+    new BonusReward(4, 5);
+    new BonusReward(7, 8);
+    new BonusReward(10, 12);
+    new BonusReward(20, 30);
+    boolean output2 = BonusReward.isExceeding();
     // Test the output
-    assertEquals(true, output2);
+    assertTrue(output2);
   }
 
   @Test
   public void bonusListTest() {
+    BonusReward.getBonusList().clear();
     BonusReward.addToList(bonus);
     BonusReward bonusFromList = BonusReward.getBonusList().get(0);
     assertEquals(bonus, bonusFromList);

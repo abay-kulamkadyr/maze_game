@@ -15,19 +15,14 @@ public class MainMenu extends BasicGameState {
 
   Scoreboard sb = Scoreboard.getInstance();
 
-  /**
-   * To know the state of the Main Menu.
-   *
-   * @param state of the Main menu on the game.
-   */
-  public MainMenu(int state) {}
+  /** To know the state of the Main Menu. */
+  public MainMenu() {}
 
   /**
    * Initializes all the resources for the game state like exit,settings,lore and start.
    *
    * @param gc Game container of the game
    * @param sbg state based game
-   * @throws SlickException
    */
   public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
     exit = new Image("src/main/resources/Exit.png");
@@ -36,8 +31,8 @@ public class MainMenu extends BasicGameState {
     start = new Image("src/main/resources/Start Game.png");
   }
 
-  @Override
   /** Draws everything on the Game Screen using the render method */
+  @Override
   public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
     Image background = new Image("src/main/resources/Menu.png");
@@ -49,8 +44,8 @@ public class MainMenu extends BasicGameState {
     start.draw(xPos, yPos - 84 * 3);
   }
 
-  @Override
   /** Updating initialized variables and objects. */
+  @Override
   public void update(GameContainer gc, StateBasedGame stb, int delta) throws SlickException {
     // getting coordinates of mouse
     int mouseX = Mouse.getX();
@@ -87,8 +82,8 @@ public class MainMenu extends BasicGameState {
     }
   }
 
-  @Override
   /** Returns the ID of the MainMenu state */
+  @Override
   public int getID() {
     return 0;
   }

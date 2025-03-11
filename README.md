@@ -1,59 +1,138 @@
-## Nazareth: Kiki's Search for Za'atar.
+# Nazareth: Kiki's Search for Za'atar
 
-##### We hope you enjoy the game we have presented so far.
+Welcome to **Nazareth**, a game where Kiki embarks on a perilous journey through treacherous dungeons in search of
+ancient Za'atar. We hope you enjoy the adventure and challenges presented in this project.
 
-##### Within the game Kiki will venture through treacherous dungeons in search of ancient Za'atar.  
-##### Throughout these levels Kiki will overcome tough obstacles in search of her final reward .
+---
 
+## Table of Contents
 
-### Follow these instructions
- 
- 
+- [Overview](#overview)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Building the Game](#building-the-game)
+- [Running the Game](#running-the-game)
+- [Testing the Game](#testing-the-game)
+- [Packaging a Self-Contained Jar](#packaging-a-self-contained-jar)
+- [Additional Notes](#additional-notes)
 
-1. ***INSTRUCTIONS TO BUILD GAME***
+---
 
-	A - Clone repository from GitLab
+## Overview
 
-	B - If Maven is not installed, please refer to https://maven.apache.org/install.html
+In **Nazareth**, the protagonist Kiki must overcome obstacles and fight enemies in a dungeon to obtain the elusive
+Za'atar. The game is built using Java with Slick2D and LWJGL libraries, and we use Maven to manage dependencies and
+build the project. The final jar is self-contained—it automatically extracts and loads the required native libraries at
+runtime.
 
-	C - If  Maven has been installed, while in file directory "Documents" of the game,using command prompt or terminal, enter command:  
-	   *mvn clean install*
-	
-	D - Required dependencies will be installed.
+---
 
+## Requirements
 
-2. ***INSTRUCTIONS TO RUN GAME***
+- **Java:** This project must be compiled and run using Java 8.
+- **Maven:** Ensure Maven is installed on your system. See [Maven Installation](https://maven.apache.org/install.html)
+  for instructions.
+- **Operating System:** The game is cross-platform (Linux, Windows, macOS). Native libraries for each OS are packaged
+  and automatically extracted at runtime.
+- **Executable Jar:** An executable jar is included in the root folder of the project for convenience.
 
-	A - Be sure to complete instruction set 1
+---
 
-	B -  While in "Documents" file directory of game,using command prompt or terminal, set environmental variable MAVEN_OPTS with command:  
-	   *On Windows : set MAVEN_OPTS="-Djava.library.path=target/natives"*   
-	   *On MacOS : export MAVEN_OPTS=-Djava.library.path=target/natives*
-	
-	C - While still in "Documents" file directory of game,using command prompt or terminal, enter command:  
-	   *mvn compile exec:java -Dexec.mainClass=RunGame*
+## Installation
 
+1. **Clone the Repository:**
 
-3.  ***INSTRUCTIONS TO TEST GAME***
+   Clone the project repository from GitLab (or your version control system):
 
-	A - Making sure instruction set 1 has been completed
+```bash
+git clone https://github.com/abay-kulamkadyr/maze_game.git
+Install Maven (if not installed):
 
-	B - While in "Documents" file directory of game, using command prompt or terminal, enter command:    
-	    *mvn clean test*	
+Follow the instructions at Maven Installation.
+```
 
-	C - Wait for results of test
+---
 
+## Building the Game
 
-4.  ***INSTRUCTIONS TO BUILD JAR GAME*** 
+    Open a terminal or command prompt and navigate to the project root (the directory containing the pom.xml file).
 
-	A- Complete instruction set 1
+    Run the following command to clean and build the project:
 
-	B- While in "Documents" file directory of game, using command prompt or terminal, enter command:      
-	   *mvn clean package*
+```bash
+mvn clean install
 
-	C- Next, while still in the "Documents" file directory of game, using command prompt or terminal, enter command:  
-	   *java -Djava.library.path=target/natives -jar target/NAZARETH-1.2-SNAPSJOT.jar*
+```
 
-	D- Enjoy the game!
-	
-	
+	Maven will download all required dependencies (including native libraries) and run tests. On a successful build, the compiled classes and packaged jar(s) will be generated in the target directory.
+
+---
+
+## Running the Game
+
+Option 1: Run via Maven (for development)
+
+    Make sure you have completed the build step.
+
+    From the project root, run:
+
+```bash
+mvn compile exec:java -Dexec.mainClass=RunGame
+```
+
+Option 2: Run the Executable Jar
+
+	An executable jar file is included in the root folder as well as in the target directory. To run the game using the self-contained jar, simply execute:
+
+```bash
+java -jar Nazareth-2.jar
+```
+
+Note: The jar is self-contained—it extracts all necessary native libraries (LWJGL, JInput, OpenAL, etc.) automatically
+at runtime, so you don't need to set any extra command-line options.
+
+--- 
+
+## Testing the Game
+
+To run the unit tests, execute the following command from the project root:
+
+```bash
+mvn clean test
+```
+
+Maven will compile the tests and display the results in the console.
+
+## Packaging a Self-Contained Jar
+
+The final jar is created using the Maven Shade Plugin, which merges your project classes with all dependencies (
+including native libraries) into one executable jar.
+
+    From the project root, run:
+
+```bash
+mvn clean package
+```
+
+The packaged jar, typically named Nazareth-2.jar, will be located in the target directory and also included in the
+project root.
+
+To run the jar, use:
+
+```bash
+java -jar Nazareth-2.jar
+```
+
+## Additional Notes
+
+    Java Version:
+    This project must be compiled and run using Java 8. Newer Java versions may not be compatible with Slick2D and some native libraries used in the project.
+
+    Native Libraries:
+    Maven downloads the native libraries into your local repository (~/.m2/repository/...), and the Maven Shade Plugin merges them into the final jar. The NativeLoader class automatically extracts these files to a temporary directory at runtime and sets the necessary system properties so that LWJGL and JInput can locate them.
+
+    Cross-Platform Support:
+    The game is designed to run on Linux, Windows, and macOS. The NativeLoader extracts the appropriate native files based on the operating system.
+
+    Executable Jar:
+    An executable jar file (NazaretH-2.jar) is included in the root folder for ease of use. Users can simply run it without any extra configuration.

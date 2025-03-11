@@ -14,6 +14,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 public class Settings extends BasicGameState {
 
+  private static TrueTypeFont gothic;
   Image back;
   Image up;
   Image down;
@@ -23,12 +24,9 @@ public class Settings extends BasicGameState {
   Image blank;
   int xPos = 900 / 2;
   int stallkey = -1;
-
   Font font;
-  private static TrueTypeFont gothic;
-  private Input input;
 
-  public Settings(int state) {}
+  public Settings() {}
 
   @Override
   public int getID() {
@@ -38,9 +36,6 @@ public class Settings extends BasicGameState {
   /**
    * Intializes all the variables that will be needed for the menu.
    *
-   * @param container
-   * @param game
-   * @throws SlickException
    */
   @Override
   public void init(GameContainer container, StateBasedGame game) throws SlickException {
@@ -68,10 +63,6 @@ public class Settings extends BasicGameState {
   /**
    * Renders in the graphics and displays which keys are being used for controls.
    *
-   * @param container
-   * @param game
-   * @param g
-   * @throws SlickException
    */
   @Override
   public void render(GameContainer container, StateBasedGame game, Graphics g)
@@ -114,14 +105,10 @@ public class Settings extends BasicGameState {
    * Updates the menu and allows the user to change key bindings. To do this they must first press a
    * key to change the button to then click on the key that they want to change.
    *
-   * @param container
-   * @param stb
-   * @param delta
-   * @throws SlickException
    */
   @Override
   public void update(GameContainer container, StateBasedGame stb, int delta) throws SlickException {
-    input = container.getInput();
+    Input input = container.getInput();
     int mouseX = Mouse.getX();
     int mouseY = Mouse.getY();
     int yBack = 720 - 38;
