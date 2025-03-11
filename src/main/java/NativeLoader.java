@@ -44,16 +44,29 @@ public class NativeLoader {
   /** Loads libjawt.so from the JDK so that LWJGL's dependency is met. */
   private static void loadJAWT() {
     String javaHome = System.getProperty("java.home");
-    File jawtFile = new File(javaHome + "/lib/amd64/libjawt.so");
-    if (!jawtFile.exists()) {
-      // Try parent directory if java.home points to a JRE.
+    String os = System.getProperty("os.name").toLowerCase();
+
+    File jawtFile;
+
+    if (os.contains("win")) {
+      jawtFile = new File(javaHome + "\\bin\\jawt.dll");
+    } else if (os.contains("mac")) {
+      jawtFile = new File(javaHome + "/lib/libjawt.dylib");
+    } else {
+      // Assume Linux
+      jawtFile = new File(javaHome + "/lib/amd64/libjawt.so");
+    }
+
+    if (!jawtFile.exists() && os.contains("linux")) {
+      // Try parent directory if java.home points to a JRE
       jawtFile = new File(new File(javaHome).getParent() + "/lib/amd64/libjawt.so");
     }
+
     if (jawtFile.exists()) {
       System.load(jawtFile.getAbsolutePath());
-      System.out.println("Loaded libjawt from: " + jawtFile.getAbsolutePath());
+      System.out.println("Loaded JAWT from: " + jawtFile.getAbsolutePath());
     } else {
-      throw new UnsatisfiedLinkError("libjawt.so not found in expected locations.");
+      throw new UnsatisfiedLinkError("JAWT library not found in expected locations for " + os);
     }
   }
 
